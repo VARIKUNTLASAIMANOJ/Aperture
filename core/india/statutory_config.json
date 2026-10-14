@@ -1,0 +1,91 @@
+{
+  "_README": [
+    "Operator-maintained statutory configuration, keyed by Indian Financial Year.",
+    "Rates change every Union Budget. Update THIS FILE — never the calculator code.",
+    "Each FY block carries `verified_on` and `source`; the API surfaces both so a",
+    "stale configuration is visible rather than silently applied.",
+    "Amounts are annual INR unless a field name says monthly."
+  ],
+  "default_financial_year": "FY2025-26",
+
+  "financial_years": {
+    "FY2025-26": {
+      "label": "FY 2025-26 (AY 2026-27)",
+      "verified_on": "2026-08-16",
+      "source": "Seed values — verify against the current Finance Act / CBDT notification before payroll use.",
+
+      "income_tax": {
+        "new_regime": {
+          "standard_deduction": 75000,
+          "slabs": [
+            { "upto": 400000, "rate": 0.00 },
+            { "upto": 800000, "rate": 0.05 },
+            { "upto": 1200000, "rate": 0.10 },
+            { "upto": 1600000, "rate": 0.15 },
+            { "upto": 2000000, "rate": 0.20 },
+            { "upto": 2400000, "rate": 0.25 },
+            { "upto": null, "rate": 0.30 }
+          ],
+          "rebate_87a": { "taxable_income_upto": 1200000, "max_rebate": 60000 }
+        },
+        "old_regime": {
+          "standard_deduction": 50000,
+          "slabs": [
+            { "upto": 250000, "rate": 0.00 },
+            { "upto": 500000, "rate": 0.05 },
+            { "upto": 1000000, "rate": 0.20 },
+            { "upto": null, "rate": 0.30 }
+          ],
+          "rebate_87a": { "taxable_income_upto": 500000, "max_rebate": 12500 }
+        },
+        "cess_rate": 0.04,
+        "cess_label": "Health and Education Cess",
+        "surcharge_slabs": [
+          { "above": 5000000, "rate": 0.10 },
+          { "above": 10000000, "rate": 0.15 },
+          { "above": 20000000, "rate": 0.25 }
+        ]
+      },
+
+      "epf": {
+        "employee_rate": 0.12,
+        "employer_rate": 0.12,
+        "statutory_wage_ceiling_monthly": 15000,
+        "eps_rate": 0.0833,
+        "admin_charges_rate": 0.005,
+        "note": "Employers may contribute on actual Basic instead of the ceiling; controlled per-offer by `pf_on_actual_basic`."
+      },
+
+      "esi": {
+        "employee_rate": 0.0075,
+        "employer_rate": 0.0325,
+        "gross_wage_ceiling_monthly": 21000,
+        "note": "ESI applies only while monthly gross is at or below the ceiling."
+      },
+
+      "gratuity": {
+        "accrual_rate_of_basic": 0.0481,
+        "eligibility_years": 5,
+        "note": "4.81% of Basic is the conventional CTC accrual (15/26 days per year)."
+      },
+
+      "professional_tax": {
+        "annual_max": 2500,
+        "by_state": {
+          "KA": 2400, "MH": 2500, "TS": 2400, "AP": 2400, "TN": 2080,
+          "WB": 2400, "GJ": 2400, "MP": 2500, "OD": 2400, "AS": 2400,
+          "KL": 2400, "BR": 2400, "JH": 2400, "CG": 2400, "MN": 1200,
+          "ML": 1800, "MZ": 1200, "NL": 1200, "PB": 2400, "SK": 2400,
+          "TR": 2400, "GA": 2400, "PY": 1800
+        },
+        "note": "States absent from this map do not levy Professional Tax."
+      },
+
+      "hra_exemption": {
+        "metro_rate_of_basic": 0.50,
+        "non_metro_rate_of_basic": 0.40,
+        "rent_less_basic_percent": 0.10
+      }
+    }
+  }
+}

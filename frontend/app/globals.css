@@ -1,0 +1,361 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ─────────────────────────────────────────────────────────────────────────
+   Design tokens
+
+   Light-first, after the dark cyan console turned out to look like nothing
+   anyone in HR actually uses. The reference points are Keka, Darwinbox and
+   Zoho People: white cards on a faintly grey ground, grey rules, a blue
+   primary, and green/amber/red reserved strictly for status.
+
+   Contrast is stated per value because several of these are the dark end of
+   a Tailwind ramp chosen specifically to clear 4.5:1 on white — amber and
+   green in particular are unusable at their mid-range on a light surface.
+   ───────────────────────────────────────────────────────────────────────── */
+:root {
+  /* ── Light is the default ────────────────────────────────────────────────
+     HR software is used all day in bright offices; dark-only was a developer
+     preference. Dark is still available below, but it is now the variant.
+
+     Every value is checked against the surface it actually sits on — the
+     ratios in the comments are measured against #FFFFFF (card) unless noted,
+     because that is where body text lives. */
+  /* The ground sits a real step below the cards. At #F6F7F9 it was 2% off
+     white and nothing floated — the whole console read as one flat sheet.
+     Slate-tinted rather than neutral grey: a pure grey ground next to pure
+     white cards looks clinical, a faint cool cast reads as considered. */
+  --c-void: 226 231 242;      /* #E2E7F2  page ground                       */
+  --c-abyss: 215 222 236;     /* #D7DEEC  recessed                          */
+  --c-surface: 255 255 255;   /* #FFFFFF  cards — stays white so body text
+                                 keeps its full contrast budget             */
+  --c-surface-raised: 244 247 252; /* #F4F7FC  hover / nested               */
+
+  --c-fg: 17 24 39;           /* #111827  16.1:1                            */
+  --c-fg-muted: 75 85 99;     /* #4B5563   7.6:1                            */
+  --c-fg-faint: 95 107 122;   /* #5F6B7A  4.75 on ground, 5.43 on card     */
+
+  /* Blue, not cyan: cyan has no dark-enough shade that stays recognisably
+     cyan on white, and blue is what this category of software uses. */
+  --c-signal: 29 78 216;      /* #1D4ED8   6.3:1 — safe for text and icons  */
+  --c-signal-deep: 30 64 175; /* #1E40AF   hover                            */
+  --c-on-primary: 255 255 255;/* text on a filled primary button            */
+
+  --c-hold: 146 64 14;        /* #92400E  7.09 on white, 6.07 on its chip   */
+  --c-settled: 22 101 52;     /* #166534  7.13 on white, 6.12 on its chip   */
+  --c-alarm: 185 28 28;       /* #B91C1C   6.1:1                            */
+  --c-violet: 109 40 217;     /* #6D28D9   7.0:1                            */
+  --c-violet-deep: 91 33 182;
+
+  /* Neutral fills and rules, as alpha over whatever is beneath — one set of
+     names so components stop hard-coding white/[0.04], which only ever made
+     sense on a dark ground. */
+  --fill: rgba(15, 23, 42, 0.035);
+  --fill-strong: rgba(15, 23, 42, 0.065);
+  --line-soft: rgba(15, 23, 42, 0.07);
+  --line: rgba(15, 23, 42, 0.11);
+  --line-strong: rgba(15, 23, 42, 0.18);
+
+  /* Layered rather than a single hairline shadow: one tight contact shadow to
+     seat the card, one wide soft one to lift it. A single 1px shadow is what
+     made the cards look printed onto the page instead of resting on it. */
+  --shadow-card:
+    0 1px 2px rgba(15, 23, 42, 0.04),
+    0 2px 8px -2px rgba(15, 23, 42, 0.06);
+  --shadow-lift:
+    0 2px 4px rgba(15, 23, 42, 0.05),
+    0 12px 28px -8px rgba(15, 23, 42, 0.12);
+  --radius-card: 14px;
+
+  --glass-bg: rgba(255, 255, 255, 0.72);
+  --glass-bg-strong: rgba(255, 255, 255, 0.86);
+  --glass-border: rgba(17, 24, 39, 0.1);
+  --glass-border-lit: rgba(17, 24, 39, 0.16);
+  --blur-amount: 16px;
+
+  --t-micro: 11px;
+  --t-body: 13px;
+  --t-base: 14px;
+  --t-lead: 16px;
+  --t-title: 20px;
+  --t-display: 28px;
+
+  --sidebar-w: 212px;
+
+  --t-tap: 120ms;
+  --t-hover: 220ms;
+  --t-panel: 420ms;
+  --t-scene: 900ms;
+
+  color-scheme: light;
+}
+
+/* ── Dark ──────────────────────────────────────────────────────────────────
+   Only the values that change are redefined, so there is one source of truth
+   for sizing and motion. Applies on an explicit choice; the login screen's
+   WebGL scene also opts in locally. */
+/* The login screen scopes dark to a wrapper; its canvas sits at -z-10, so the
+   ground has to come from an ancestor that is NOT a stacking context. */
+body:has([data-theme="dark"]) { background-color: rgb(7 9 12); }
+
+[data-theme="dark"] {
+  --c-void: 7 9 12;
+  --c-abyss: 12 16 20;
+  --c-surface: 13 17 23;
+  --c-surface-raised: 18 23 31;
+
+  --c-fg: 242 246 248;
+  --c-fg-muted: 148 163 184;
+  --c-fg-faint: 122 138 158;
+
+  --c-signal: 34 211 238;
+  --c-signal-deep: 8 145 178;
+  --c-on-primary: 7 9 12;     /* dark text on a bright cyan fill */
+
+  --c-hold: 245 158 11;
+  --c-settled: 52 211 153;
+  --c-alarm: 248 113 113;
+  --c-violet: 168 85 247;
+  --c-violet-deep: 124 58 237;
+
+  --fill: rgba(255, 255, 255, 0.04);
+  --fill-strong: rgba(255, 255, 255, 0.075);
+  --line-soft: rgba(255, 255, 255, 0.06);
+  --line: rgba(255, 255, 255, 0.1);
+  --line-strong: rgba(255, 255, 255, 0.16);
+
+  --glass-bg: rgba(255, 255, 255, 0.045);
+  --glass-bg-strong: rgba(255, 255, 255, 0.07);
+  --glass-border: rgba(255, 255, 255, 0.09);
+  --glass-border-lit: rgba(255, 255, 255, 0.16);
+
+  color-scheme: dark;
+}
+
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  /* Ground AND gradient in one declaration on <body>.
+     This was a `.page-wash::before` at `z-index: -1`, which paints behind the
+     ROOT background — so the body colour covered it and the gradient was
+     invisible at every width where the body colour won. Painting it here
+     removes the stacking question altogether, and `fixed` keeps it still
+     while content scrolls. */
+  background-color: rgb(var(--c-void));
+  background-image:
+    radial-gradient(58% 48% at 6% -6%, rgba(37, 99, 235, 0.18), transparent 66%),
+    radial-gradient(52% 44% at 104% 2%, rgba(124, 58, 237, 0.18), transparent 68%),
+    radial-gradient(64% 50% at 46% 108%, rgba(14, 165, 233, 0.16), transparent 70%);
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+  color: rgb(var(--c-fg));
+  font-feature-settings: "cv02", "cv03", "cv04", "ss01";
+  -webkit-font-smoothing: antialiased;
+  overscroll-behavior: none;
+}
+
+/* Focus: never removed, only restyled. (Priority 1 — Accessibility.) */
+:focus-visible {
+  outline: 2px solid rgb(var(--c-signal));
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+:focus:not(:focus-visible) {
+  outline: none;
+}
+
+/* ── Brand mark ──────────────────────────────────────────────────────────
+   The frame inherits currentColor, so the mark adapts to whatever surface it
+   sits on without shipping a second asset. These tokens re-point on a light
+   background; the app itself is dark-only, but the mark is not. */
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme="dark"]) .logo-mark {
+    --c-signal: 8 145 178;   /* deepen for contrast on white */
+    --c-violet: 124 58 237;
+  }
+}
+
+.logo-mark .logo-frame,
+.logo-mark .logo-glyph,
+.logo-mark .logo-spark,
+.logo-mark .logo-node {
+  transition:
+    stroke-opacity var(--t-hover) cubic-bezier(0.22, 1, 0.36, 1),
+    opacity var(--t-hover) cubic-bezier(0.22, 1, 0.36, 1),
+    transform var(--t-hover) cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* Glow is carried by the SVG filter, so it follows the glyph outline rather
+   than haloing the bounding box the way a box-shadow would. */
+.logo-mark .logo-glyph {
+  opacity: 0.92;
+}
+.group\/logo:hover .logo-mark .logo-glyph,
+a:hover .logo-mark .logo-glyph,
+button:hover .logo-mark .logo-glyph {
+  opacity: 1;
+}
+.group\/logo:hover .logo-mark .logo-frame,
+a:hover .logo-mark .logo-frame,
+button:hover .logo-mark .logo-frame {
+  stroke-opacity: 0.6;
+}
+.group\/logo:hover .logo-mark .logo-node,
+a:hover .logo-mark .logo-node,
+button:hover .logo-mark .logo-node {
+  transform: translateX(1px);
+  transform-origin: center;
+}
+
+/* Focus-visible gets the same emphasis as hover — the glow must not be
+   hover-only (ux-guidelines: "Reliance on hover only"). */
+a:focus-visible .logo-mark .logo-glyph,
+button:focus-visible .logo-mark .logo-glyph {
+  opacity: 1;
+}
+
+/* ── Grain. Static SVG turbulence, no image request, no layout cost. ─────── */
+/* Grain is a dark-ground effect; on white it reads as dirt. */
+[data-theme="dark"] .grain::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.16;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 240 240' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* ── Glass primitive ─────────────────────────────────────────────────────
+   The substrate is a DARK tint, not just a white veil. A purely translucent
+   white panel inherits whatever the WebGL layer is doing behind it, and body
+   text drops below 4.5:1 the moment the agent drifts underneath. Compositing
+   the frost on top of an opaque-enough dark base fixes the floor while
+   keeping the blur and the light edge. */
+.glass {
+  background:
+    linear-gradient(
+      var(--glass-bg-strong),
+      var(--glass-bg)
+    ),
+    rgb(var(--c-abyss) / 0.82);
+  border: 1px solid var(--glass-border);
+  backdrop-filter: blur(var(--blur-amount)) saturate(150%);
+  -webkit-backdrop-filter: blur(var(--blur-amount)) saturate(150%);
+}
+
+/* Fallback: without backdrop-filter the panel would be near-transparent and
+   text would fail contrast against the moving canvas. Go opaque instead. */
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .glass {
+    background: rgb(var(--c-abyss) / 0.94);
+  }
+}
+
+/* Top-edge specular highlight — reads as a light source above the panel. */
+.glass-lit {
+  position: relative;
+}
+.glass-lit::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(
+    160deg,
+    var(--glass-border-lit),
+    transparent 38%,
+    transparent 62%,
+    rgba(34, 211, 238, 0.14)
+  );
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+/* ── Surface primitive ───────────────────────────────────────────────────
+   One border, one background, no blur. `surface-raised` is for nested or
+   hovered rows, so depth is a single legible step rather than a gradient. */
+.surface {
+  background: rgb(var(--c-surface));
+  border: 1px solid var(--line-soft);
+  box-shadow: var(--shadow-card);
+}
+[data-theme="dark"] .surface { box-shadow: none; }
+
+/* Opt-in lift for the one or two surfaces that should read as the subject of
+   a page — used sparingly, because if everything lifts nothing does. */
+.surface-lift { box-shadow: var(--shadow-lift); }
+[data-theme="dark"] .surface-lift { box-shadow: none; }
+
+/* A very soft tint behind the page. Two wide radials at low alpha: enough to
+   stop a 1400px-wide expanse of flat grey, not enough to compete with content
+   or move any text off its measured contrast. */
+/* Retained as a no-op. The wash moved onto <body> (see above) once it turned
+   out a negative-z pseudo-element can never paint over the root background;
+   the class stays so the pages that opt in read as intentional. */
+.page-wash { }
+
+/* The login screen scopes dark to a wrapper and supplies its own ground. */
+[data-theme="dark"] { background-image: none; }
+.surface-raised {
+  background: rgb(var(--c-surface-raised));
+}
+/* Rows in a table/list: the hairline belongs between them, not around each. */
+.divide-line > * + * {
+  border-top: 1px solid var(--line-soft);
+}
+
+.hairline {
+  background-image: linear-gradient(
+    90deg,
+    transparent,
+    var(--glass-border-lit),
+    transparent
+  );
+}
+
+/* Scrollbars inside glass panels */
+.thin-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.16) transparent;
+}
+.thin-scroll::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+.thin-scroll::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.16);
+  border-radius: 999px;
+}
+.thin-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* ── Reduced motion ──────────────────────────────────────────────────────
+   Kills decorative loops. Framer transitions are neutralised in lib/motion.ts
+   and the WebGL loop is demoted in AgentScene so the object still renders,
+   just without continuous animation. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  .grain::after {
+    opacity: 0.1;
+  }
+}

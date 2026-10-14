@@ -1,0 +1,48 @@
+{# Email carrying the Appointment Letter. Sent only after HR releases it —
+   the candidate has no way to reach this document before that (Rule 5). #}
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Your Appointment Letter</title></head>
+<body style="margin:0;padding:0;background:#f4f6f9;font-family:'Segoe UI',Arial,sans-serif;color:#1a1f2b;">
+  <div style="max-width:680px;margin:24px auto;background:#fff;border-radius:8px;overflow:hidden;box-shadow:0 2px 16px rgba(0,0,0,.08);">
+
+    <div style="background:#0b3d91;padding:28px 36px;">
+      <h1 style="margin:0;color:#fff;font-size:22px;font-weight:700;">Welcome aboard, {{ candidate_name }}</h1>
+      <p style="margin:6px 0 0;color:rgba(255,255,255,.8);font-size:13px;">
+        Your Appointment Letter for the position of {{ designation }} is enclosed.
+      </p>
+    </div>
+
+    <div style="padding:28px 36px;font-size:14px;line-height:1.7;">
+      <p style="margin-top:0;">
+        Thank you for accepting our offer. Please find your Appointment Letter
+        (Ref: <strong>{{ document_number }}</strong>) enclosed below. It sets out
+        the full terms and conditions of your employment and forms your formal
+        employment record.
+      </p>
+
+      <table role="presentation" cellpadding="0" cellspacing="0" style="margin:24px 0;">
+        <tr><td>
+          <a href="{{ portal_url }}/candidate/{{ thread_id }}?token={{ action_token }}"
+             style="display:inline-block;background:#0b3d91;color:#fff;text-decoration:none;
+                    padding:13px 26px;border-radius:6px;font-weight:600;font-size:14px;">
+            View / Download Appointment Letter
+          </a>
+        </td></tr>
+      </table>
+
+      <p style="font-size:12.5px;color:#5a6b85;margin-bottom:0;">
+        Please sign and return the duplicate copy. Our HR team will contact you
+        shortly with onboarding and joining formalities, including the documents
+        required for payroll and statutory registration (PAN, Aadhaar, bank
+        details and UAN).
+      </p>
+    </div>
+
+    <div style="border-top:1px solid #e3e8f0;">
+      {{ appointment_letter_html | safe }}
+    </div>
+  </div>
+</body>
+</html>

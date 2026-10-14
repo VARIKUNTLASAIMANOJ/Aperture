@@ -1,0 +1,126 @@
+{# APPOINTMENT LETTER (§2)
+   The formal employment record, issued only after the Offer Letter is
+   accepted. It carries the detailed terms the Offer deliberately omitted —
+   working hours, probation, notice, statutory deductions, confidentiality,
+   conduct. It does not restate the Offer Letter (§8). #}
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="UTF-8"><title>Appointment Letter — {{ candidate_name }}</title></head>
+<body>
+<div class="sheet">
+  {% include "_letterhead.html.j2" %}
+  <div class="doctype">Appointment Letter</div>
+
+  <div class="body">
+    <p>Dear {{ candidate_name }},</p>
+
+    <p>
+      Further to your acceptance of our Offer Letter
+      {% if offer_reference %}(Ref: {{ offer_reference }}){% endif %}
+      {% if offer_accepted_date %}dated {{ offer_accepted_date }}{% endif %},
+      we are pleased to confirm your appointment with {{ company_name }} on the
+      following terms and conditions.
+    </p>
+
+    <h2 class="sec">Employment Particulars</h2>
+    <table class="kv">
+      <tr><td class="k">Employee Name</td><td class="v">{{ candidate_name }}</td></tr>
+      <tr><td class="k">Employee ID</td><td class="v">{{ employee_id }}</td></tr>
+      <tr><td class="k">Designation</td><td class="v">{{ designation }}</td></tr>
+      <tr><td class="k">Department</td><td class="v">{{ department }}</td></tr>
+      <tr><td class="k">Employment Type</td><td class="v">{{ employment_type_label }}</td></tr>
+      <tr><td class="k">Date of Joining</td><td class="v">{{ joining_date }}</td></tr>
+      <tr><td class="k">Work Location</td><td class="v">{{ work_city }}, {{ work_state }}</td></tr>
+      <tr><td class="k">Reporting Manager</td><td class="v">{{ reporting_manager }}</td></tr>
+      <tr><td class="k">Working Hours</td><td class="v">{{ working_hours }}</td></tr>
+      <tr><td class="k">Probation Period</td><td class="v">{{ probation_months }} months</td></tr>
+      <tr><td class="k">Notice Period</td><td class="v">{{ notice_period_days }} days</td></tr>
+    </table>
+
+    <h2 class="sec">Remuneration</h2>
+    <table class="sal">
+      <tr><th>Component</th><th style="text-align:right">Per Annum</th><th style="text-align:right">Per Month</th></tr>
+      <tr><td>Basic Salary</td><td class="amt">{{ f.basic }}</td><td class="amt">{{ m.basic }}</td></tr>
+      <tr><td>House Rent Allowance (HRA)</td><td class="amt">{{ f.hra }}</td><td class="amt">{{ m.hra }}</td></tr>
+      {% if breakup.conveyance %}<tr><td>Conveyance Allowance</td><td class="amt">{{ f.conveyance }}</td><td class="amt">{{ m.conveyance }}</td></tr>{% endif %}
+      {% if breakup.medical %}<tr><td>Medical Allowance</td><td class="amt">{{ f.medical }}</td><td class="amt">{{ m.medical }}</td></tr>{% endif %}
+      <tr><td>Special Allowance</td><td class="amt">{{ f.special_allowance }}</td><td class="amt">{{ m.special_allowance }}</td></tr>
+      <tr class="sub"><td>Gross Salary</td><td class="amt">{{ f.gross_salary }}</td><td class="amt">{{ m.gross_salary }}</td></tr>
+      {% if breakup.employer_pf %}<tr><td>Employer PF Contribution</td><td class="amt">{{ f.employer_pf }}</td><td class="amt">{{ m.employer_pf }}</td></tr>{% endif %}
+      {% if breakup.employer_esi %}<tr><td>Employer ESI Contribution</td><td class="amt">{{ f.employer_esi }}</td><td class="amt">{{ m.employer_esi }}</td></tr>{% endif %}
+      {% if breakup.gratuity_accrual %}<tr><td>Gratuity (accrual)</td><td class="amt">{{ f.gratuity_accrual }}</td><td class="amt">—</td></tr>{% endif %}
+      <tr class="total"><td>Total CTC</td><td class="amt">{{ f.total_ctc }}</td><td class="amt">{{ m.total_ctc }}</td></tr>
+    </table>
+    <p style="font-size:12px;color:#5a6b85;">
+      Salary is payable <strong>{{ pay_frequency_label }}</strong>, on or before the
+      last working day of each calendar month, by credit to your designated bank account.
+    </p>
+
+    <h2 class="sec">Statutory Deductions</h2>
+    <table class="sal">
+      <tr><th>Deduction</th><th style="text-align:right">Per Annum</th><th style="text-align:right">Per Month</th></tr>
+      {% if breakup.employee_pf %}<tr><td>Employee Provident Fund (EPF) — 12% of Basic</td><td class="amt">{{ f.employee_pf }}</td><td class="amt">{{ m.employee_pf }}</td></tr>{% endif %}
+      {% if breakup.employee_esi %}<tr><td>Employees' State Insurance (ESI)</td><td class="amt">{{ f.employee_esi }}</td><td class="amt">{{ m.employee_esi }}</td></tr>{% endif %}
+      {% if breakup.professional_tax %}<tr><td>Professional Tax ({{ work_state }})</td><td class="amt">{{ f.professional_tax }}</td><td class="amt">{{ m.professional_tax }}</td></tr>{% endif %}
+      <tr><td>Income Tax (TDS) — {{ regime_label }}</td><td class="amt">{{ f.income_tax_tds }}</td><td class="amt">{{ m.income_tax_tds }}</td></tr>
+      <tr class="total"><td>Estimated Net Take-Home</td><td class="amt">{{ f.net_annual }}</td><td class="amt">{{ m.net }}</td></tr>
+    </table>
+    <p style="font-size:12px;color:#5a6b85;">
+      Computed for <strong>{{ financial_year_label }}</strong> under the
+      {{ regime_label }}. TDS is deducted under Section 192 of the Income Tax
+      Act, 1961 and will be revised on the basis of your investment
+      declarations and proofs. Form 16 will be issued after the close of the
+      financial year. You may elect to change your tax regime at the start of
+      the financial year, subject to prevailing rules.
+    </p>
+
+    <h2 class="sec">Leave Entitlement</h2>
+    <table class="kv">
+      <tr><td class="k">Earned / Privilege Leave</td><td class="v">{{ leave.earned }} days per annum</td></tr>
+      <tr><td class="k">Casual Leave</td><td class="v">{{ leave.casual }} days per annum</td></tr>
+      <tr><td class="k">Sick Leave</td><td class="v">{{ leave.sick }} days per annum</td></tr>
+      {% if leave.maternity %}<tr><td class="k">Maternity Leave</td><td class="v">{{ leave.maternity }} days (Maternity Benefit Act, 1961)</td></tr>{% endif %}
+      {% if leave.paternity %}<tr><td class="k">Paternity Leave</td><td class="v">{{ leave.paternity }} days</td></tr>{% endif %}
+      <tr><td class="k">Public Holidays</td><td class="v">As per the {{ work_state }} holiday calendar</td></tr>
+    </table>
+
+    <h2 class="sec">Terms and Conditions of Employment</h2>
+    <ol class="terms">
+      <li><strong>Probation.</strong> You will be on probation for {{ probation_months }} months from your date of joining. The Company may extend this period at its discretion. Confirmation is subject to satisfactory performance and will be communicated in writing.</li>
+      <li><strong>Notice Period.</strong> After confirmation, either party may terminate this employment by giving {{ notice_period_days }} days' written notice or salary in lieu thereof. During probation, {{ probation_notice_days }} days' notice shall apply.</li>
+      <li><strong>Termination.</strong> The Company may terminate your employment without notice in the event of misconduct, breach of policy, unauthorised absence, or falsification of records. Your employment is also subject to satisfactory background verification.</li>
+      <li><strong>Confidentiality.</strong> You shall not, during or after your employment, disclose any confidential or proprietary information of the Company, its clients or partners, to any third party. All work product created in the course of your employment shall remain the exclusive property of the Company.</li>
+      <li><strong>Code of Conduct.</strong> You shall abide by the Company's policies, including those on ethics, anti-bribery, information security, and the Prevention of Sexual Harassment (POSH) Act, 2013.</li>
+      <li><strong>Statutory Compliance.</strong> Your employment is governed by applicable Indian labour legislation, including the Employees' Provident Funds and Miscellaneous Provisions Act, 1952 and the Payment of Gratuity Act, 1972. Gratuity is payable on completion of {{ gratuity_years }} years of continuous service.</li>
+      <li><strong>Transfer.</strong> The Company may transfer or depute you to any of its offices, group companies or client locations in India, based on business requirements.</li>
+      <li><strong>Documentation.</strong> You are required to submit PAN, Aadhaar, bank account details with IFSC, and your UAN (if previously employed) to enable payroll and statutory compliance.</li>
+      <li><strong>Exclusivity.</strong> You shall devote your whole time and attention to the Company's business and shall not engage in any other employment or business without prior written consent.</li>
+      <li><strong>Governing Law.</strong> This appointment is governed by the laws of India and subject to the exclusive jurisdiction of the courts at {{ work_city }}.</li>
+    </ol>
+
+    <p>
+      Please sign and return the duplicate copy of this letter in token of your
+      acceptance of the above terms.
+    </p>
+
+    <table class="sign"><tr>
+      <td>
+        For {{ company_name }},
+        <div class="line">
+          <strong>{{ hr_signatory_name }}</strong><br>{{ hr_signatory_designation }}
+        </div>
+      </td>
+      <td>
+        Accepted and agreed
+        <div class="line">{{ candidate_name }}<br>Date: ____________________</div>
+      </td>
+    </tr></table>
+  </div>
+
+  <div class="foot">
+    {{ company_name }} · {{ company_address }} · This Appointment Letter is the
+    formal record of your employment.
+  </div>
+</div>
+</body>
+</html>

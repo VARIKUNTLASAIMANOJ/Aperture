@@ -1,0 +1,56 @@
+# ── Core runtime ──────────────────────────────────────────────────────────
+python-dotenv>=1.0.0
+pydantic[email]>=2.7.0
+pydantic-settings>=2.2.1
+
+# ── API layer ──────────────────────────────────────────────────────────────
+fastapi>=0.111.0
+uvicorn[standard]>=0.30.0
+python-multipart>=0.0.9
+
+# ── LangGraph / LangChain ──────────────────────────────────────────────────
+langgraph>=0.2.0
+langgraph-checkpoint-postgres>=1.0.0
+langchain-core>=0.3.0
+langchain-openai>=0.1.0          # used for NVIDIA NIM (OpenAI-compatible endpoint)
+
+# ── Database ───────────────────────────────────────────────────────────────
+sqlmodel>=0.0.19
+sqlalchemy[asyncio]>=2.0.30
+asyncpg>=0.29.0
+psycopg2-binary>=2.9.9           # sync driver for Celery DB access
+alembic>=1.13.1
+
+# ── Vector DB / RAG ────────────────────────────────────────────────────────
+qdrant-client>=1.9.0
+
+# ── Task queue ─────────────────────────────────────────────────────────────
+celery>=5.4.0
+redis>=5.0.4
+
+# ── Templating ─────────────────────────────────────────────────────────────
+jinja2>=3.1.4
+
+# ── PDF rendering ──────────────────────────────────────────────────────────
+# xhtml2pdf, not WeasyPrint: WeasyPrint needs pango/cairo as system libraries
+# and dies inside GObject when those come from Homebrew while Python comes
+# from conda. This is pure Python and installs anywhere pip runs — see the
+# rationale at the top of core/india/pdf.py.
+xhtml2pdf>=0.2.11
+
+# ── Email (Resend) ─────────────────────────────────────────────────────────
+resend>=2.0.0
+
+# ── Voice agent (LiveKit + Deepgram) ───────────────────────────────────────
+# `livekit-api` is needed by the API process to place calls; the `agents`
+# packages are only imported by the separate worker (python -m voice.agent).
+livekit-api>=0.8.0
+livekit-agents[deepgram,openai,silero]>=1.0.0
+
+# ── Cryptography (AES-256 PII) ─────────────────────────────────────────────
+cryptography>=42.0.0
+
+# ── Dev / testing ──────────────────────────────────────────────────────────
+pytest>=8.2.0
+pytest-asyncio>=0.23.6
+httpx>=0.27.0

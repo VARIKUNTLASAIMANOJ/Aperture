@@ -1,0 +1,105 @@
+{# OFFER LETTER (§1)
+   The company's formal intent to hire. Deliberately NOT the appointment
+   record: it states the position and CTC and asks for a decision. Detailed
+   employment terms belong in the Appointment Letter and are not duplicated
+   here (§8). #}
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="UTF-8"><title>Offer Letter — {{ candidate_name }}</title></head>
+<body>
+<div class="sheet">
+  {% include "_letterhead.html.j2" %}
+  <div class="doctype">Offer Letter</div>
+
+  <div class="body">
+    <p>Dear {{ candidate_name }},</p>
+
+    <p>
+      We are pleased to inform you that you have been <strong>selected</strong> for
+      the position of <strong>{{ designation }}</strong> at {{ company_name }}.
+      This letter sets out the principal terms of our offer.
+    </p>
+
+    <h2 class="sec">Position Details</h2>
+    <table class="kv">
+      <tr><td class="k">Designation</td><td class="v">{{ designation }}</td></tr>
+      <tr><td class="k">Department</td><td class="v">{{ department }}</td></tr>
+      <tr><td class="k">Employment Type</td><td class="v">{{ employment_type_label }}</td></tr>
+      <tr><td class="k">Proposed Date of Joining</td><td class="v">{{ joining_date }}</td></tr>
+      <tr><td class="k">Work Location</td><td class="v">{{ work_city }}, {{ work_state }}</td></tr>
+      <tr><td class="k">Reporting Manager</td><td class="v">{{ reporting_manager }}</td></tr>
+    </table>
+
+    <h2 class="sec">Compensation</h2>
+    <div class="callout">
+      <div class="ctc">{{ ctc_inr }}</div>
+      <div style="font-size:12px;color:#5a6b85;margin-top:2px;">
+        {{ ctc_lpa }} — Total Cost to Company (CTC) per annum
+      </div>
+    </div>
+
+    <table class="sal">
+      <tr><th>Component</th><th style="text-align:right">Per Annum</th><th style="text-align:right">Per Month</th></tr>
+      <tr><td>Basic Salary</td><td class="amt">{{ f.basic }}</td><td class="amt">{{ m.basic }}</td></tr>
+      <tr><td>House Rent Allowance (HRA)</td><td class="amt">{{ f.hra }}</td><td class="amt">{{ m.hra }}</td></tr>
+      {% if breakup.conveyance %}<tr><td>Conveyance Allowance</td><td class="amt">{{ f.conveyance }}</td><td class="amt">{{ m.conveyance }}</td></tr>{% endif %}
+      {% if breakup.medical %}<tr><td>Medical Allowance</td><td class="amt">{{ f.medical }}</td><td class="amt">{{ m.medical }}</td></tr>{% endif %}
+      <tr><td>Special Allowance</td><td class="amt">{{ f.special_allowance }}</td><td class="amt">{{ m.special_allowance }}</td></tr>
+      {% if breakup.performance_bonus %}<tr><td>Performance Bonus (variable)</td><td class="amt">{{ f.performance_bonus }}</td><td class="amt">—</td></tr>{% endif %}
+      <tr class="sub"><td>Gross Salary</td><td class="amt">{{ f.gross_salary }}</td><td class="amt">{{ m.gross_salary }}</td></tr>
+      {% if breakup.employer_pf %}<tr><td>Employer contribution to Provident Fund</td><td class="amt">{{ f.employer_pf }}</td><td class="amt">{{ m.employer_pf }}</td></tr>{% endif %}
+      {% if breakup.employer_esi %}<tr><td>Employer contribution to ESI</td><td class="amt">{{ f.employer_esi }}</td><td class="amt">{{ m.employer_esi }}</td></tr>{% endif %}
+      {% if breakup.gratuity_accrual %}<tr><td>Gratuity (accrual)</td><td class="amt">{{ f.gratuity_accrual }}</td><td class="amt">—</td></tr>{% endif %}
+      <tr class="total"><td>Total CTC</td><td class="amt">{{ f.total_ctc }}</td><td class="amt">{{ m.total_ctc }}</td></tr>
+    </table>
+
+    <div class="callout warn">
+      <strong>Please note:</strong> CTC is the total cost to the Company and is
+      <em>not</em> your take-home salary. Your monthly net pay after statutory
+      deductions (Provident Fund{% if breakup.esi_applicable %}, ESI{% endif %},
+      Professional Tax and TDS) is estimated at
+      <strong>{{ m.net }}</strong> per month, computed under the
+      <strong>{{ regime_label }}</strong> for {{ financial_year_label }}.
+      Actual TDS depends on the investment declarations you submit.
+    </div>
+
+    {% if offer_conditions %}
+    <h2 class="sec">Conditions</h2>
+    <p>{{ offer_conditions }}</p>
+    {% endif %}
+
+    <h2 class="sec">Validity</h2>
+    <p>
+      This offer is valid until <strong>{{ offer_expiry_date }}</strong> and is
+      subject to satisfactory background verification and submission of the
+      documents requested by the Human Resources department. Detailed terms of
+      employment will be issued in a separate <strong>Appointment Letter</strong>
+      after you accept this offer.
+    </p>
+
+    <p style="margin-top:20px;">
+      Please record your decision using the secure link sent with this email.
+      We look forward to welcoming you to {{ company_name }}.
+    </p>
+
+    <table class="sign"><tr>
+      <td>
+        Yours sincerely,
+        <div class="line">
+          <strong>{{ hr_signatory_name }}</strong><br>{{ hr_signatory_designation }}<br>{{ company_name }}
+        </div>
+      </td>
+      <td>
+        Accepted by candidate
+        <div class="line">{{ candidate_name }}<br>Date: ____________________</div>
+      </td>
+    </tr></table>
+  </div>
+
+  <div class="foot">
+    This is a system-generated Offer Letter issued by {{ company_name }}.
+    It does not by itself constitute a contract of employment.
+  </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,59 @@
+{# Email that CARRIES the Offer Letter and collects the candidate's decision.
+   Distinct from offer_letter_in.html.j2, which is the document itself — this
+   is the covering message plus the two signed action links. #}
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Your Offer Letter</title></head>
+<body style="margin:0;padding:0;background:#f4f6f9;font-family:'Segoe UI',Arial,sans-serif;color:#1a1f2b;">
+  <div style="max-width:680px;margin:24px auto;background:#fff;border-radius:8px;overflow:hidden;box-shadow:0 2px 16px rgba(0,0,0,.08);">
+
+    <div style="background:#0b3d91;padding:28px 36px;">
+      <h1 style="margin:0;color:#fff;font-size:22px;font-weight:700;">Congratulations, {{ candidate_name }}</h1>
+      <p style="margin:6px 0 0;color:rgba(255,255,255,.8);font-size:13px;">
+        Your Offer Letter for the position of {{ designation }} is enclosed.
+      </p>
+    </div>
+
+    <div style="padding:28px 36px;font-size:14px;line-height:1.7;">
+      <p style="margin-top:0;">
+        We are delighted to extend this offer. Please review the enclosed Offer
+        Letter (Ref: <strong>{{ document_number }}</strong>) and record your
+        decision using the buttons below.
+      </p>
+
+      {# Buttons are the ONLY way to respond: each link carries the signed token
+         that identifies this candidate. Plain URLs would let anyone with the
+         thread id accept on their behalf. #}
+      <table role="presentation" cellpadding="0" cellspacing="0" style="margin:26px 0;">
+        <tr>
+          <td style="padding-right:12px;">
+            <a href="{{ portal_url }}/candidate/{{ thread_id }}?token={{ action_token }}&action=accept"
+               style="display:inline-block;background:#0b7a3b;color:#fff;text-decoration:none;
+                      padding:13px 26px;border-radius:6px;font-weight:600;font-size:14px;">
+              Accept Offer
+            </a>
+          </td>
+          <td>
+            <a href="{{ portal_url }}/candidate/{{ thread_id }}?token={{ action_token }}&action=decline"
+               style="display:inline-block;background:#fff;color:#b3261e;text-decoration:none;
+                      padding:12px 24px;border:1px solid #e5b4b0;border-radius:6px;font-weight:600;font-size:14px;">
+              Decline Offer
+            </a>
+          </td>
+        </tr>
+      </table>
+
+      <p style="font-size:12.5px;color:#5a6b85;margin-bottom:0;">
+        This link is personal to you and will expire. Detailed terms of
+        employment will be issued in a separate <strong>Appointment Letter</strong>
+        once you accept.
+      </p>
+    </div>
+
+    <div style="border-top:1px solid #e3e8f0;">
+      {{ offer_letter_html | safe }}
+    </div>
+  </div>
+</body>
+</html>

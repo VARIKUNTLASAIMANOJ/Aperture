@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Application Update</title>
+  <style>
+    body { font-family: 'Segoe UI', Arial, sans-serif; background: #f5f7fa; margin: 0; padding: 0; color: #1a1a2e; }
+    .wrapper { max-width: 580px; margin: 40px auto; background: #fff; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 24px rgba(0,0,0,0.08); }
+    .header { background: linear-gradient(135deg, #1a1a2e, #2d2d44); padding: 40px 48px; }
+    .header h1 { color: #fff; margin: 0; font-size: 24px; font-weight: 600; }
+    .header p { color: rgba(255,255,255,0.6); font-size: 14px; margin: 8px 0 0; }
+    .body { padding: 40px 48px; font-size: 15px; line-height: 1.8; color: #333; }
+    .footer { background: #f5f7fa; padding: 24px 48px; text-align: center; font-size: 12px; color: #999; border-top: 1px solid #eee; }
+  </style>
+</head>
+<body>
+  <div class="wrapper">
+    <div class="header">
+      <h1>Your Application Status</h1>
+      <p>Regarding your application for <strong>{{ role_title }}</strong></p>
+    </div>
+    <div class="body">
+      {{ email_body_html | safe }}
+    </div>
+    <div class="footer">
+      Enterprise Onboarding System — Confidential HR Communication
+    </div>
+  </div>
+</body>
+</html>
